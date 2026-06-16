@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+    --ink: #1a1a2e;
+    --ink2: #4a4a6a;
+    --ink3: #8888a8;
+    --surface: #ffffff;
+    --bg: #f4f3f8;
+    --line: #e8e6f0;
+    --accent: #6c5ce7;
+    --accent-light: #ede9ff;
+    --accent-mid: #a29bfe;
+    --green: #00b894;
+    --green-light: #e8faf5;
+    --red: #e17055;
+}
