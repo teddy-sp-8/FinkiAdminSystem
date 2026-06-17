@@ -132,8 +132,6 @@
                 </div>
             @endif
 
-
-
             @if($request->admin_note)
                 <div style="background: #fefce8; border: 1px solid #fde047; border-radius: 12px; padding: 1.25rem; margin-top: 1.5rem; margin-bottom: 1.5rem;">
                     <div style="font-weight: 600; color: #854d0e; margin-bottom: 6px; font-size: 13px;">
@@ -164,8 +162,16 @@
                 </div>
 
                 <div class="field">
-                    <label for="admin_note">Белешка до студентот</label>
-                    <textarea name="admin_note" id="admin_note" placeholder="Внесете официјален одговор или забелешка за студентот...">{{ old('admin_note', $request->admin_note) }}</textarea>
+                    <label for="admin_note">Белешка до студентот </label>
+                    <textarea name="admin_note" id="admin_note" placeholder="Дополнителна белешка...">{{ old('admin_note', $request->admin_note) }}</textarea>
+                </div>
+
+                <div class="field" id="rejection-feedback-box" style="display: none;">
+                    <label for="admin_feedback" style="color: #ef4444;">
+                        Причина за одбивање <span style="color: #ef4444;">*</span>
+                    </label>
+                    <textarea name="admin_feedback" id="admin_feedback" placeholder="Објаснете зошто го одбивате барањето..." style="border-color: #fecaca;">{{ old('admin_feedback', $request->admin_feedback) }}</textarea>
+                    <small style="color: #ef4444; font-size: 12px;">Ова поле е задолжително при одбивање.</small>
                 </div>
 
                 <div class="field" style="margin-top: 1.25rem; margin-bottom: 2rem;">
@@ -186,4 +192,21 @@
             </form>
         </div>
     </div>
+
+    <script>
+        const statusSelect = document.getElementById('status');
+        const feedbackBox = document.getElementById('rejection-feedback-box');
+
+        function toggleFeedbackBox() {
+            if (statusSelect.value === 'rejected') {
+                feedbackBox.style.display = 'block';
+            } else {
+                feedbackBox.style.display = 'none';
+            }
+        }
+
+        toggleFeedbackBox();
+
+        statusSelect.addEventListener('change', toggleFeedbackBox);
+    </script>
 @endsection

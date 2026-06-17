@@ -281,11 +281,9 @@
                 <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 1.5rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                         <div style="flex: 1; min-width: 250px;">
-
-                                <p style="font-size: 14px; color: #065f46; line-height: 1.6; margin: 0;">
-                                    Вашето барање е успешно одобрено.
-                                </p>
-
+                            <p style="font-size: 14px; color: #065f46; line-height: 1.6; margin: 0;">
+                                Вашето барање е успешно одобрено.
+                            </p>
                         </div>
 
                         @if($request->issued_document)
@@ -305,6 +303,25 @@
                             @endif
                         @endif
                     </div>
+                </div>
+            </div>
+        @endif
+
+        {{-- SECTION: REJECTED STATUS --}}
+        @if($request->status === 'rejected')
+            <div class="detail-section" style="margin-top: 2rem;">
+                <div class="detail-label" style="color: #ef4444;">Официјален одговор од службата</div>
+                <div style="background: #fee2e2; border: 1px solid #fecaca; border-radius: 8px; padding: 1.5rem;">
+                    <p style="font-size: 14px; color: #991b1b; line-height: 1.6; margin-bottom: 10px;">
+                        <strong>Барањето е одбиено.</strong>
+                    </p>
+
+                    @if($request->admin_feedback)
+                        <div style="background: white; border: 1px solid #fecaca; border-radius: 6px; padding: 12px;">
+                            <strong style="color: #7f1d1d;">Причина:</strong><br>
+                            <span style="color: #7f1d1d; white-space: pre-line;">{{ $request->admin_feedback }}</span>
+                        </div>
+                    @endif
                 </div>
             </div>
         @endif

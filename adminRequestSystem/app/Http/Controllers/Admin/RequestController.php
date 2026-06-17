@@ -83,15 +83,23 @@ class RequestController extends Controller
     {
         $administrativeRequest = AdministrativeRequest::findOrFail($adminRequest);
 
-        $validated = $request->validate([
-            'status' => 'required|in:pending,processing,approved,rejected',
+        $rules = [
+            'status' => 'required|in:pending,processing,approved,rejected,issued',
             'admin_note' => 'nullable|string|max:1000',
+            'admin_feedback' => 'nullable|string|max:2000',
             'issued_document' => 'nullable|file|mimes:pdf|max:5120',
-        ]);
+        ];
+
+        if ($request->status === 'rejected') {
+            $rules['admin_feedback'] = 'required|string|max:2000';
+        }
+
+        $validated = $request->validate($rules);
 
         $data = [
             'status' => $validated['status'],
             'admin_note' => $validated['admin_note'] ?? null,
+            'admin_feedback' => $validated['admin_feedback'] ?? null,
         ];
 
         if ($request->hasFile('issued_document')) {
@@ -100,11 +108,8 @@ class RequestController extends Controller
 
         $administrativeRequest->update($data);
 
-        return redirect()->route('admin.requests.index')
-            ->with('success', 'Промените се успешно зачувани!');
+        return back()->with('success', 'Промените се успешно зачувани!');
     }
-
-
     public function typesIndex()
     {
         $requestTypes = RequestType::withCount('administrativeRequests')
