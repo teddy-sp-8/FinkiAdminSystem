@@ -28,4 +28,16 @@ class User extends Authenticatable
         return $this->hasMany(AdministrativeRequest::class);
     }
 
+    public function getIndexNumberAttribute(): ?string
+    {
+        if ($this->is_admin) {
+            return null;
+        }
+
+        $year = $this->created_at ? $this->created_at->format('y') : date('y');
+        $id = $this->id;
+        return $year . str_pad($id, 5, '0', STR_PAD_LEFT);
+    }
+
+
 }

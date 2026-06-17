@@ -177,7 +177,7 @@
                 <div class="step-label">Поднесено</div>
             </div>
 
-            <div class="timeline-step {{ in_array($request->status, ['in_review', 'approved', 'issued']) ? 'step-completed' : '' }}">
+            <div class="timeline-step {{ in_array($request->status, ['in_review', 'approved', 'issued','processing']) ? 'step-completed' : '' }}">
                 <div class="step-icon">2</div>
                 <div class="step-label">Преглед</div>
             </div>
@@ -195,25 +195,27 @@
             @else
                 <div class="timeline-step">
                     <div class="step-icon">3</div>
-                    <div class="step-label">Издадено</div>
+                    <div class="step-label"><Одобрено></Одобрено></div>
                 </div>
             @endif
 
-            <div class="timeline-step {{ ($request->status === 'approved' || $request->status === 'issued') && $request->payment_status === 'paid' ? 'step-completed' : '' }}">
-                <div class="step-icon">4</div>
-                <div class="step-label">Плаќање</div>
-                <div class="step-sublabel">
-                    @if($request->status === 'approved' || $request->status === 'issued')
-                        @if($request->payment_status === 'paid')
-                            Платено
+            @if($request->requestType->price > 0)
+                <div class="timeline-step {{ ($request->status === 'approved' || $request->status === 'issued') && $request->payment_status === 'paid' ? 'step-completed' : '' }}">
+                    <div class="step-icon">4</div>
+                    <div class="step-label">Плаќање</div>
+                    <div class="step-sublabel">
+                        @if($request->status === 'approved' || $request->status === 'issued')
+                            @if($request->payment_status === 'paid')
+                                Платено
+                            @else
+                                Чека уплатница
+                            @endif
                         @else
-                            Чека уплатница
+                            По одобрување
                         @endif
-                    @else
-                        По одобрување
-                    @endif
+                    </div>
                 </div>
-            </div>
+            @endif
         </div>
     </div>
 
@@ -279,24 +281,28 @@
                 <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 1.5rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                         <div style="flex: 1; min-width: 250px;">
-                            @if($request->admin_note)
-                                <p style="font-size: 14px; color: #065f46; line-height: 1.6; margin: 0;">
-                                    <strong>Белешка:</strong> "{{ $request->admin_note }}"
-                                </p>
-                            @else
+
                                 <p style="font-size: 14px; color: #065f46; line-height: 1.6; margin: 0;">
                                     Вашето барање е успешно одобрено.
                                 </p>
-                            @endif
+
                         </div>
 
                         @if($request->issued_document)
-                            <div>
-                                <a href="{{ Storage::url($request->issued_document) }}" target="_blank"
-                                   style="display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; background: #2563eb; border-radius: 8px; font-size: 13px; font-weight: 600; color: #ffffff; text-decoration: none;">
-                                    📄 Преземи документ (PDF)
-                                </a>
-                            </div>
+                            @if($request->payment_status === 'paid' || $request->requestType->price == 0)
+                                <div>
+                                    <a href="{{ Storage::url($request->issued_document) }}" target="_blank"
+                                       style="display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; background: #2563eb; border-radius: 8px; font-size: 13px; font-weight: 600; color: #ffffff; text-decoration: none;">
+                                        📄 Преземи документ (PDF)
+                                    </a>
+                                </div>
+                            @else
+                                <div style="background: #fefce8; border: 1px solid #fde047; border-radius: 8px; padding: 12px;">
+                                    <p style="margin: 0; color: #854d0e; font-size: 14px;">
+                                        Документот е подготвен, но мора прво да го платите надоместот за да го преземете.
+                                    </p>
+                                </div>
+                            @endif
                         @endif
                     </div>
                 </div>

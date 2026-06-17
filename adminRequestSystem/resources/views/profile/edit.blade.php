@@ -42,7 +42,6 @@
             }
         }
 
-        /* SIDEBAR CARD */
         .profile-side {
             background: var(--surface);
             border: 1px solid var(--line);
@@ -133,7 +132,6 @@
             gap: 2rem;
         }
 
-        /* THEMED CARDS */
         .card {
             background: var(--surface);
             border: 1px solid var(--line);
@@ -426,54 +424,61 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Мои Документи</div>
-                        <div class="card-count">{{ $issuedDocuments->count() }} документи</div>
-                    </div>
+                    @if(!auth()->user()->is_admin)
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Мои Документи</div>
+                                <div class="card-count">{{ $issuedDocuments->count() }} документи</div>
+                            </div>
 
-                    @if($issuedDocuments->isEmpty())
-                        <div class="empty-docs-box">
-                            <div class="empty-docs-icon">📄</div>
-                            <h3 class="empty-docs-title">Нема издадени документи</h3>
-                            <p class="empty-docs-p">Кога некое од твоите барања ќе биде одобрено и издадено, документот
-                                ќе се прикаже тука.</p>
-                        </div>
-                    @else
-                        <div style="overflow-x: auto;">
-                            <table class="themed-table">
-                                <thead>
-                                <tr>
-                                    <th>Документ</th>
-                                    <th>Датум на издавање</th>
-                                    <th style="text-align: right;">Акција</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($issuedDocuments as $doc)
-                                    <tr>
-                                        <td>
-                                            <div class="doc-title">{{ $doc->requestType->name }}</div>
-                                        </td>
-                                        <td>
-                                            <span class="doc-date">{{ $doc->updated_at->format('d.m.Y') }}</span>
-                                        </td>
-                                        <td style="text-align: right;">
-                                            <a href="{{ Storage::url($doc->issued_document) }}" target="_blank"
-                                               class="btn-download">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
-                                                     style="width:16px; height:16px;" fill="none" viewBox="0 0 24 24"
-                                                     stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                          stroke-width="2"
-                                                          d="M4 16v-4m0 0l4 4m-4-4l4-4m12 0v4m0 0l-4-4m4 4l-4 4"/>
-                                                </svg>
-                                                Превземи PDF
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                            @if($issuedDocuments->isEmpty())
+                                <div class="empty-docs-box">
+                                    <div class="empty-docs-icon">📄</div>
+                                    <h3 class="empty-docs-title">Нема издадени документи</h3>
+                                    <p class="empty-docs-p">Кога некое од твоите барања ќе биде одобрено и издадено,
+                                        документот
+                                        ќе се прикаже тука.</p>
+                                </div>
+                            @else
+                                <div style="overflow-x: auto;">
+                                    <table class="themed-table">
+                                        <thead>
+                                        <tr>
+                                            <th>Документ</th>
+                                            <th>Датум на издавање</th>
+                                            <th style="text-align: right;">Акција</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($issuedDocuments as $doc)
+                                            <tr>
+                                                <td>
+                                                    <div class="doc-title">{{ $doc->requestType->name }}</div>
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        class="doc-date">{{ $doc->updated_at->format('d.m.Y') }}</span>
+                                                </td>
+                                                <td style="text-align: right;">
+                                                    <a href="{{ Storage::url($doc->issued_document) }}" target="_blank"
+                                                       class="btn-download">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
+                                                             style="width:16px; height:16px;" fill="none"
+                                                             viewBox="0 0 24 24"
+                                                             stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                  stroke-width="2"
+                                                                  d="M4 16v-4m0 0l4 4m-4-4l4-4m12 0v4m0 0l-4-4m4 4l-4 4"/>
+                                                        </svg>
+                                                        Превземи PDF
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
                         </div>
                     @endif
                 </div>
